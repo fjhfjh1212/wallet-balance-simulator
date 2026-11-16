@@ -295,6 +295,11 @@ img { display: block; }
 
 /* ---------- 关于页 ---------- */
 .about-topbar { height: 56px; flex: none; display: flex; align-items: center; }
+/* About text uses the system font: the original renders these TextViews
+   in the Android system default, while the bundled WeChatSans fonts draw
+   lowercase Latin as small capitals ("by LIYOUCHEN" would show as
+   "BY LIYOUCHEN"). */
+#screen-about { font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif; }
 .about-title { flex: 1; font-size: 20px; color: #FFF; margin-left: 16px; }
 .about-scroll {
   padding-top: 56px;
