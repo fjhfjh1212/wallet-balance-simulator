@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#181F27">
+<title>钱包模拟器</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="img-sizes.css">
+</head>
+<body>
+
+<!-- ============ 首次启动警告弹窗 ============ -->
+<div id="warn-overlay" class="overlay" hidden>
+  <div class="dlg-card">
+    <div class="dlg-title">警告</div>
+    <div class="dlg-body">1.请勿使用本软件做任何违反法当地或国家法律法规的事情。<br>2.使用本软件产生的一切后果由使用者自行承担，软件作者不承担任何责任<br>3.本软件安全无毒无后台，不需要任何权限</div>
+    <label class="dlg-check"><input type="checkbox" id="warn-nomore"> 不再提示</label>
+    <div class="dlg-btns">
+      <button type="button" id="warn-reject">拒绝</button>
+      <button type="button" id="warn-accept">接受</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 拒绝后的关闭页 ============ -->
+<div id="closed-screen" class="screen dark" hidden>
+  <div class="closed-box">
+    <div class="closed-text">已退出</div>
+    <button type="button" class="closed-btn" id="reopen-btn">重新进入</button>
+  </div>
+</div>
+
+<!-- ============ 主菜单 ============ -->
+<div id="screen-main" class="screen dark">
+  <header class="appbar">
+    <span class="appbar-title">钱包余额模拟器</span>
+    <button type="button" class="icon-btn" id="main-more" aria-label="更多"><svg viewBox="0 0 24 24" width="24" height="24"><path fill="#FFFFFF" d="M12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,10c-1.1,0 -2,0.9 -2,2s0.9,2 2,2 2,-0.9 2,-2 -0.9,-2 -2,-2zM12,16c-1.1,0 -2,0.9 -2,2s0.9,2 2,2 2,-0.9 2,-2 -0.9,-2 -2,-2z"/></svg></button>
+  </header>
+  <div id="main-menu" class="popup-menu" hidden><button type="button" id="menu-about">关于</button></div>
+  <main class="scroll">
+    <button type="button" class="menu-btn" data-go="screen-wx"><img class="fit24" src="img/ic_main_wx.png" alt="">某信钱包</button>
+    <button type="button" class="menu-btn" data-go="screen-zfb"><img class="fit24" src="img/ic_main_zfb.png" alt="">某宝钱包</button>
+    <button type="button" class="menu-btn" data-go="screen-bank"><img class="fit24" src="img/ic_main_bank.png" alt="">其它银行</button>
+  </main>
+</div>
+
+<!-- ============ 某信钱包 / 微信支付页 ============ -->
+<div id="screen-wx" class="screen light" hidden>
+  <header class="wx-topbar">
+    <button type="button" class="wx-back" data-go="screen-main" aria-label="返回"><img class="img-ic_wx_back" src="img/ic_wx_back.png" alt=""></button>
+    <span class="wx-title">支付</span>
+    <button type="button" class="wx-more" aria-label="更多"><img class="img-ic_wx_more" src="img/ic_wx_more.png" alt=""></button>
+  </header>
+  <main class="scroll wx-scroll">
+    <div class="wx-green-card">
+      <div class="wx-green-half">
+        <img class="img-ic_wx_sfk" src="img/ic_wx_sfk.png" alt="">
+        <span class="wx-green-label">收付款</span>
+      </div>
+      <div class="wx-green-half" id="wx-wallet" role="button">
+        <img class="img-ic_wx_qb" src="img/ic_wx_qb.png" alt="">
+        <span class="wx-green-label">钱包</span>
+        <span class="wx-amount-row"><span class="wx-yen">¥</span><span class="wx-amount" id="wx-amount">0.00(点击即可设置金额)</span></span>
+      </div>
+    </div>
+
+    <div class="wx-card">
+      <div class="wx-card-title">金融理财</div>
+      <div class="wx-grid-row row-bottom-30">
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_11" src="img/ic_wx_11.png" alt=""></div><span class="wx-item">信用卡还款</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_12" src="img/ic_wx_12.png" alt=""></div><span class="wx-item">微粒贷借钱</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_13" src="img/ic_wx_13.png" alt=""></div><span class="wx-item">理财通</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_14" src="img/ic_wx_14.png" alt=""></div><span class="wx-item">保险服务</span></div>
+      </div>
+    </div>
+
+    <div class="wx-card">
+      <div class="wx-card-title">生活服务</div>
+      <div class="wx-grid-row row-bottom-15">
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_21" src="img/ic_wx_21.png" alt=""></div><span class="wx-item">手机充值</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_22" src="img/ic_wx_22.png" alt=""></div><span class="wx-item">生活缴费</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_23" src="img/ic_wx_23.png" alt=""></div><span class="wx-item">Q币充值</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_24" src="img/ic_wx_24.png" alt=""></div><span class="wx-item">城市服务</span></div>
+      </div>
+      <div class="wx-grid-row row-bottom-15">
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_25" src="img/ic_wx_25.png" alt=""></div><span class="wx-item">腾讯公益</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_26" src="img/ic_wx_26.png" alt=""></div><span class="wx-item">医疗健康</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_27" src="img/ic_wx_27.png" alt=""></div><span class="wx-item">防疫健康码</span><span class="wx-promo">限时推广</span></div>
+        <div class="wx-cell"></div>
+      </div>
+    </div>
+
+    <div class="wx-card">
+      <div class="wx-card-title">交通出行</div>
+      <div class="wx-grid-row row-bottom-30">
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_31" src="img/ic_wx_31.png" alt=""></div><span class="wx-item">出行服务</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_32" src="img/ic_wx_32.png" alt=""></div><span class="wx-item">火车票机票</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_33" src="img/ic_wx_33.png" alt=""></div><span class="wx-item">滴滴出行</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_34" src="img/ic_wx_34.png" alt=""></div><span class="wx-item">酒店</span></div>
+      </div>
+    </div>
+
+    <div class="wx-card">
+      <div class="wx-card-title">购物消费</div>
+      <div class="wx-grid-row row-bottom-15">
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_41" src="img/ic_wx_41.png" alt=""></div><span class="wx-item">智慧零售</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_42" src="img/ic_wx_42.png" alt=""></div><span class="wx-item">京东购物</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_43" src="img/ic_wx_43.png" alt=""></div><span class="wx-item">美团外卖</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_44" src="img/ic_wx_44.png" alt=""></div><span class="wx-item">电影演出赛事</span></div>
+      </div>
+      <div class="wx-grid-row row-bottom-15">
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_45" src="img/ic_wx_45.png" alt=""></div><span class="wx-item">美团团购</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_46" src="img/ic_wx_46.png" alt=""></div><span class="wx-item">拼多多</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_47" src="img/ic_wx_47.png" alt=""></div><span class="wx-item">蘑菇街女装</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_48" src="img/ic_wx_48.png" alt=""></div><span class="wx-item">唯品会特卖</span></div>
+      </div>
+      <div class="wx-grid-row row-bottom-30">
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_49" src="img/ic_wx_49.png" alt=""></div><span class="wx-item">转转二手</span></div>
+        <div class="wx-cell"><div class="wx-ic"><img class="img-ic_wx_410" src="img/ic_wx_410.png" alt=""></div><span class="wx-item">贝壳找房</span></div>
+        <div class="wx-cell"></div>
+        <div class="wx-cell"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ============ 某宝钱包 / 支付宝余额页 ============ -->
+<div id="screen-zfb" class="screen zfb" hidden>
+  <header class="zfb-topbar">
+    <button type="button" class="zfb-back" data-go="screen-main" aria-label="返回"><img class="img-ic_zfb_back" src="img/ic_zfb_back.png" alt=""></button>
+    <span class="zfb-title">余额</span>
+    <span class="zfb-manage">管理</span>
+  </header>
+  <main class="scroll">
+    <div class="zfb-blue">
+      <div class="zfb-total-row">
+        <span class="zfb-total-label">总金额(元)</span>
+        <img class="img-ic_zfb_eye" src="img/ic_zfb_eye.png" alt="">
+        <img class="img-ic_zfb_upgrade" src="img/ic_zfb_upgrade.png" alt="">
+      </div>
+      <div class="zfb-amount" id="zfb-amount" role="button">89953846.29</div>
+    </div>
+
+    <div class="zfb-quick">
+      <div class="zfb-quick-cell"><div class="zfb-quick-ic"><img class="img-ic_zfb_cz" src="img/ic_zfb_cz.png" alt=""></div><span>充值</span></div>
+      <div class="zfb-quick-cell"><div class="zfb-quick-ic"><img class="img-ic_zfb_tx" src="img/ic_zfb_tx.png" alt=""></div><span>提现</span></div>
+      <div class="zfb-quick-cell"><div class="zfb-quick-ic"><img class="img-ic_zfb_mfed" src="img/ic_zfb_mfed.png" alt=""></div><span>免费额度</span></div>
+    </div>
+
+    <div class="zfb-red-card">
+      <img class="img-ic_zfb_banner" src="img/ic_zfb_banner.png" alt="">
+      <span class="zfb-red-text">你有一个9999元大红包待抽取</span>
+      <span class="zfb-red-btn">去看看</span>
+    </div>
+
+    <div class="zfb-banner-card" id="zfb-dlq-card" role="button">
+      <div class="zfb-banner-head">
+        <span class="zfb-banner-title">余额享权益</span>
+        <span class="zfb-banner-link">去查看</span>
+        <img class="img-ic_zfb_arrow_brown" src="img/ic_zfb_arrow_brown.png" alt="">
+      </div>
+      <div class="zfb-banner-cols">
+        <div class="zfb-banner-col">
+          <span class="zfb-banner-label">待领取</span>
+          <span class="zfb-banner-val"><span class="zfb-banner-big" id="zfb-dlq">5000000</span><span class="zfb-banner-unit">元</span></span>
+        </div>
+        <div class="zfb-banner-col">
+          <span class="zfb-banner-label">已领取</span>
+          <span class="zfb-banner-val"><span class="zfb-banner-plus">+</span><span class="zfb-banner-big" id="zfb-ylq">0.00</span><span class="zfb-banner-unit">元</span></span>
+        </div>
+        <div class="zfb-banner-col"></div>
+      </div>
+    </div>
+
+    <div class="zfb-card" id="zfb-djd" role="button">
+      <div class="zfb-card-head">
+        <span class="zfb-card-title">大家都在用</span>
+        <span class="zfb-card-num" id="zfb-djd1">41,084,282人</span>
+        <img class="img-ic_zfb_arrow_gray" src="img/ic_zfb_arrow_gray.png" alt="">
+      </div>
+      <div class="zfb-subcard subcard-orange">
+        <div class="zfb-sub-head">
+          <img class="img-ic_zfb_dydb" src="img/ic_zfb_dydb.png" alt="">
+          <span class="zfb-sub-name">钓鱼夺宝</span>
+          <span class="zfb-sub-go">去看看</span>
+          <img class="img-ic_zfb_arrow_gray" src="img/ic_zfb_arrow_gray.png" alt="">
+        </div>
+        <div class="zfb-sub-row"><span class="zfb-sub-gray" id="zfb-djd2">漳州市王***妹</span><span class="zfb-sub-black" id="zfb-djd3">参与钓鱼夺宝中奖18.8元</span></div>
+      </div>
+      <div class="zfb-subcard subcard-blue">
+        <div class="zfb-sub-head">
+          <img class="img-ic_zfb_cxh" src="img/ic_zfb_cxh.png" alt="">
+          <span class="zfb-sub-name">充享惠</span>
+          <span class="zfb-sub-go">去看看</span>
+          <img class="img-ic_zfb_arrow_gray" src="img/ic_zfb_arrow_gray.png" alt="">
+        </div>
+        <div class="zfb-sub-row"><span class="zfb-sub-gray" id="zfb-djd4">上海市i***8</span><span class="zfb-sub-black" id="zfb-djd5">使用充享惠进行天猫购物金充值</span></div>
+      </div>
+    </div>
+
+    <div class="zfb-card">
+      <div class="zfb-service-title">服务推荐</div>
+      <div class="zfb-divider"></div>
+      <div class="zfb-service-row">
+        <div class="zfb-service-cell"><div class="zfb-service-ic"><img class="img-ic_zfb_cxh2" src="img/ic_zfb_cxh2.png" alt=""></div><span class="zfb-service-name">充享惠</span><span class="zfb-service-sub">充值立享折上折</span></div>
+        <div class="zfb-service-cell"><div class="zfb-service-ic"><img class="img-ic_zfb_byye" src="img/ic_zfb_byye.png" alt=""></div><span class="zfb-service-name">备用余额</span><span class="zfb-service-sub">江湖救急</span></div>
+        <div class="zfb-service-cell"><div class="zfb-service-ic"><img class="img-ic_zfb_dydb2" src="img/ic_zfb_dydb2.png" alt=""></div><span class="zfb-service-name">钓鱼夺宝</span><span class="zfb-service-sub">赢9999元红包</span></div>
+      </div>
+      <div class="zfb-service-row">
+        <div class="zfb-service-cell"><div class="zfb-service-ic"><img class="img-ic_zfb_myhh" src="img/ic_zfb_myhh.png" alt=""></div><span class="zfb-service-name">蚂蚁合花</span><span class="zfb-service-sub">共同开支用合花</span></div>
+        <div class="zfb-service-cell"><div class="zfb-service-ic"><img class="img-ic_zfb_qqk" src="img/ic_zfb_qqk.png" alt=""></div><span class="zfb-service-name">亲情卡</span><span class="zfb-service-sub">送给家人</span></div>
+        <div class="zfb-service-cell"><div class="zfb-service-ic"><img class="img-ic_zfb_zz" src="img/ic_zfb_zz.png" alt=""></div><span class="zfb-service-name">转账</span><span class="zfb-service-sub">支持批量转钱</span></div>
+      </div>
+      <div class="zfb-service-row">
+        <div class="zfb-service-cell"><div class="zfb-service-ic"><img class="img-ic_zfb_hb" src="img/ic_zfb_hb.png" alt=""></div><span class="zfb-service-name">红包</span><span class="zfb-service-sub">送出暖暖心意</span></div>
+        <div class="zfb-service-cell"></div>
+        <div class="zfb-service-cell"></div>
+      </div>
+    </div>
+
+    <div class="zfb-shop-card">
+      <img class="img-ic_zfb_wszh" src="img/ic_zfb_wszh.png" alt="">
+      <span class="zfb-shop-name">开网商账户</span>
+      <span class="zfb-shop-bonus">得1元余额红包</span>
+      <img class="img-ic_zfb_wszh_go" src="img/ic_zfb_wszh_go.png" alt="">
+    </div>
+
+    <div class="zfb-bottom-logo"><img class="img-bg_zfb_logo_bottom" src="img/bg_zfb_logo_bottom.png" alt=""></div>
+  </main>
+</div>
+
+<!-- ============ 其它银行 / 账户总览 ============ -->
+<div id="screen-bank" class="screen dark" hidden>
+  <header class="bank-topbar">
+    <button type="button" class="icon-btn" data-go="screen-main" aria-label="返回"><svg viewBox="0 0 24 24" width="24" height="24"><path fill="#FFFFFF" d="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z"/></svg></button>
+    <span class="bank-title">账户总览</span>
+    <button type="button" class="icon-btn" aria-label="更多"><svg viewBox="0 0 24 24" width="24" height="24"><path fill="#FFFFFF" d="M6,10c-1.1,0 -2,0.9 -2,2s0.9,2 2,2 2,-0.9 2,-2 -0.9,-2 -2,-2zM18,10c-1.1,0 -2,0.9 -2,2s0.9,2 2,2 2,-0.9 2,-2 -0.9,-2 -2,-2zM12,10c-1.1,0 -2,0.9 -2,2s0.9,2 2,2 2,-0.9 2,-2 -0.9,-2 -2,-2z"/></svg></button>
+  </header>
+  <main class="scroll">
+    <div class="bank-totals" id="bank-amount" role="button">
+      <div class="bank-total-label">总资产(元)</div>
+      <div class="bank-total-big" id="bank-amount-val">￥ 249,021,613.52</div>
+      <div class="bank-total-label bank-fz-label">总负债(元)</div>
+      <div class="bank-total-fz" id="bank-fz-val">￥ 1,739,748.55</div>
+    </div>
+
+    <div class="bank-section">一卡通</div>
+    <div class="bank-card card1" id="bank-card1" role="button">
+      <div class="bank-card-top">
+        <div class="bank-logo"><img src="img/ic_bank_unionpay.png" alt=""></div>
+        <span class="bank-card-amount" id="bank-card1-amount">￥18,542,524.44</span>
+      </div>
+      <div class="bank-card-no" id="bank-card1-no">6285 **** **** 5492</div>
+      <div class="bank-card-divider"></div>
+      <div class="bank-card-actions"><span>转账汇款</span><span>购买理财</span></div>
+    </div>
+    <div class="bank-card card2" id="bank-card2" role="button">
+      <div class="bank-card-top">
+        <div class="bank-logo"><img src="img/ic_bank_visa.png" alt=""></div>
+        <span class="bank-card-amount" id="bank-card2-amount">$ 5,431,954.28</span>
+      </div>
+      <div class="bank-card-no" id="bank-card2-no">4960 **** **** 3699</div>
+      <div class="bank-card-divider thin"></div>
+      <div class="bank-card-actions"><span>转账汇款</span><span>购买理财</span></div>
+    </div>
+
+    <div class="bank-section">信用卡</div>
+    <div class="bank-card card3" id="bank-card3" role="button">
+      <div class="bank-card-top">
+        <div class="bank-logo"><img src="img/ic_bank_mastercard.png" alt=""></div>
+        <span class="bank-card-right">
+          <span class="bank-card-amount" id="bank-card3-amount">￥1,000,000.00</span>
+          <span class="bank-card-fz" id="bank-card3-fz">- ￥50,000.00</span>
+        </span>
+      </div>
+      <div class="bank-card-no gold" id="bank-card3-no">6225 **** **** 1225</div>
+      <div class="bank-card-divider thin"></div>
+      <div class="bank-card-actions"><span>立即还款</span><span>账单查询</span></div>
+    </div>
+  </main>
+</div>
+
+<!-- ============ 关于 ============ -->
+<div id="screen-about" class="screen dark" hidden>
+  <header class="about-topbar">
+    <button type="button" class="icon-btn" data-go="screen-main" aria-label="返回"><svg viewBox="0 0 24 24" width="24" height="24"><path fill="#FFFFFF" d="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z"/></svg></button>
+    <span class="about-title">关于</span>
+  </header>
+  <main class="scroll about-scroll">
+    <img class="about-logo" src="img/jl_sun_studio_logo.png" alt="J.L S-U-N STUDIO">
+    <div class="about-by">by J.L S-U-N STUDIO</div>
+    <div class="about-version">版本：v1.1</div>
+  </main>
+  <footer class="about-footer">Copyright © 2021 J.L S-U-N STUDIO<br>All Rights Reserved.</footer>
+</div>
+
+<!-- ============ 通用编辑弹窗 ============ -->
+<div id="dlg-overlay" class="overlay" hidden>
+  <div class="dlg-card" id="dlg-card"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

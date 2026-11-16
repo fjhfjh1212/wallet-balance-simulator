@@ -1,0 +1,6 @@
+node_modules/
+ios/
+*.xcarchive
+*.ipa
+.DS_Store
+pnpm-lock.yaml

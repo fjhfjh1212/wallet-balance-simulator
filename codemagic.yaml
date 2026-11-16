@@ -1,0 +1,53 @@
+workflows:
+  ios-native-unsigned:
+    name: iOS (unsigned)
+    max_build_duration: 60
+    environment:
+      xcode: 16.2
+      cocoapods: default
+      node: 20.19.0
+    scripts:
+      - name: Install pnpm
+        script: |
+          corepack enable
+          corepack prepare pnpm@9.1.0 --activate
+      - name: Add Capacitor iOS platform (build-time only)
+        script: |
+          # The repo is a static web app (www/); the Capacitor iOS wrapper
+          # is generated here at build time, so the committed source stays
+          # exactly the web app.
+          pnpm add @capacitor/core@7 @capacitor/cli@7 @capacitor/ios@7
+          pnpm exec cap init "钱包余额模拟器" com.sun.jyc.fakewallet --web-dir=www
+          pnpm exec cap add ios
+          pnpm exec cap sync ios
+      - name: Generate app icon and splash screen
+        script: |
+          # Reads assets/icon.png (1024x1024) and assets/splash.png
+          # (2732x2732) from the repo root; icon art is the original
+          # Android launcher icon. Installed as a dev dependency so the
+          # step does not depend on the npx cache.
+          pnpm add -D @capacitor/assets
+          pnpm exec capacitor-assets generate \
+            --iconBackgroundColor '#FFFFFF' \
+            --splashBackgroundColor '#181F27'
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios/App && pod install --repo-update
+      - name: Build iOS without code signing
+        script: |
+          xcodebuild -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -sdk iphoneos \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            archive -archivePath $CM_BUILD_DIR/WalletSim.xcarchive
+      - name: Package unsigned IPA
+        script: |
+          mkdir -p $CM_BUILD_DIR/Payload
+          cp -r $CM_BUILD_DIR/WalletSim.xcarchive/Products/Applications/App.app $CM_BUILD_DIR/Payload/
+          cd $CM_BUILD_DIR && zip -r WalletBalanceSimulator-unsigned.ipa Payload
+    artifacts:
+      - WalletBalanceSimulator-unsigned.ipa
